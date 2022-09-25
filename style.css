@@ -65,8 +65,9 @@ button:focus, button:active {
 body {
     font-family: 'Roboto', sans-serif;
     background-image: url('./img/background.jpg');
-    background-size: cover;
+    background-size: auto;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .hidden {
