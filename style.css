@@ -227,8 +227,8 @@ body {
     display: none;
     height: 341px;
     overflow-y: scroll;
-    /* -ms-overflow-style: none; */
-    /* scrollbar-width: none; */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 .tab__item::-webkit-scrollbar {
@@ -258,6 +258,10 @@ body {
 
 .tab__item:target {
     display: block;
+}
+
+.tab__item::before {
+    content: "";
 }
 
 .tab-forecast__city {
@@ -308,4 +312,9 @@ body {
     position: absolute;
     bottom: 10px;
     right: 10px;
+}
+
+.active-tab {
+    color: #FFF;
+    background-color: #000;
 }
