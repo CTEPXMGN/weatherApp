@@ -64,10 +64,7 @@ button:focus, button:active {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background-image: url('./img/background.jpg');
-    background-size: auto;
-    background-repeat: no-repeat;
-    background-position: center;
+    background-color: rgb(31, 20, 6);
 }
 
 .hidden {
@@ -88,7 +85,7 @@ body {
     height: 435px;
     border: 1px solid black;
     margin: auto;
-    background-color: rgb(255, 255, 255, 0.7);
+    background-color: rgb(202, 192, 100, 0.7);
     display: grid;
     grid-template-columns: 100px 100px 100px 1fr;
     grid-template-rows: 45px 60px 1fr 45px;
@@ -181,6 +178,7 @@ body {
 
 .tab-now {
     position: relative;
+    background-color: rgb(202, 192, 100, 0.7);
 }
 
 .tab-now__temperature {
@@ -201,8 +199,8 @@ body {
 }
 .tab-now__img {
     position: absolute;
-    top: 43%;
-    left: 37%;
+    top: 21%;
+    left: 15%;
 }
 .tab-now__add {
     position: absolute;
