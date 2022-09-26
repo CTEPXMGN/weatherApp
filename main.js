@@ -26,18 +26,23 @@ async function getWeather(event) {
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
     const URL = `${SERVER_URL}?q=${UI_ELEMENTS.FIND_INPUT.value}&appid=${API_KEY}&units=metric&lang=ru`;
     
-    let response = await fetch(URL);
+    try {
+        let response = await fetch(URL);
 
-    if (response.ok) {
-        let dataWeather = await response.json();
-        console.log(dataWeather);
-
-        const SRC_IMG = `
-        https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
-        `;
-        renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
-    } else {
-        alert('Ошибочка вышла: ' + response.status);
+        if (response.ok) {
+            let dataWeather = await response.json();
+            console.log(dataWeather);
+    
+            const SRC_IMG = `
+            https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
+            `;
+            renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
+            renderDetails(dataWeather);
+        } else {
+            alert('Ошибочка вышла: ' + response.status);
+        }
+    } catch (error) {
+        alert(error.stack);
     }
     
     UI_ELEMENTS.FIND_INPUT.value = '';
@@ -65,4 +70,36 @@ function renderNow(temp, city, icon) {
     img.src = icon;
     img.alt = 'weather icon';
     UI_ELEMENTS.TAB_NOW.appendChild(img);
+};
+
+// Отрисовка вкладки DETAILS
+function renderDetails(data) {
+
+    const dateInMs = data.sys.sunrise;
+    const minutes = new Date(dateInMs).getMinutes();
+    const seconds = new Date(dateInMs).getSeconds();
+    const arrData = [
+        `Temperature: ${Math.round(data.main.temp)}°`,
+        `Feels like: ${Math.round(data.main.feels_like)}°`,
+        `Weather: ${data.weather[0].main}`,
+        `Sunrise: ${minutes}:${seconds}`,
+    ];
+
+    const p = document.createElement('p');
+    p.classList.add('tab-details__city');
+    p.textContent = data.name;
+    UI_ELEMENTS.TAB_DETAILS.appendChild(p);
+
+    const ul = document.createElement('ul');
+    ul.classList.add('tab-details__list');
+    
+    for (const item of arrData) {
+        const li = document.createElement('li');
+        li.classList.add('tab-details__item');
+        li.textContent = item;
+        ul.appendChild(li);
+    }
+
+
+    UI_ELEMENTS.TAB_DETAILS.appendChild(ul);
 };

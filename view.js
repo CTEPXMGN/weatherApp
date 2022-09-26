@@ -4,4 +4,5 @@ export const UI_ELEMENTS = {
     FIND_CITY: document.querySelector('.find__button'),
     FIND_INPUT: document.querySelector('.find__input'),
     TAB_NOW: document.querySelector('.tab-now'),
+    TAB_DETAILS: document.querySelector('.tab-details'),
 };
