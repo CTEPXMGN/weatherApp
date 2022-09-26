@@ -17,20 +17,24 @@ UI_ELEMENTS.FIND_FORM.addEventListener('submit', getWeather);
 
 async function getWeather(event) {
     event.preventDefault();
-    UI_ELEMENTS.TAB_NOW.innerHTML = '';
+
+    while(UI_ELEMENTS.TAB_NOW.firstChild){
+        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
+    };
 
     const SERVER_URL = 'http://api.openweathermap.org/data/2.5/weather';
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
     const URL = `${SERVER_URL}?q=${UI_ELEMENTS.FIND_INPUT.value}&appid=${API_KEY}&units=metric&lang=ru`;
     
-
     let response = await fetch(URL);
 
     if (response.ok) {
         let dataWeather = await response.json();
         console.log(dataWeather);
 
-        const SRC_IMG = `https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png`;
+        const SRC_IMG = `
+        https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
+        `;
         renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
     } else {
         alert('Ошибочка вышла: ' + response.status);
@@ -61,6 +65,4 @@ function renderNow(temp, city, icon) {
     img.src = icon;
     img.alt = 'weather icon';
     UI_ELEMENTS.TAB_NOW.appendChild(img);
-}
-
-// 
+};
