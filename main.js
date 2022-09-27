@@ -1,26 +1,31 @@
 import { UI_ELEMENTS } from "./view.js";
 
 // Переключение табов
-for (const item of UI_ELEMENTS.TABS) {
-    item.addEventListener('click', switchTab);
-}
 
-function switchTab() {
-    for (const item of UI_ELEMENTS.TABS) {
-        item.classList.remove('active-tab');
-    };
-    this.classList.add('active-tab');
-};
+document.querySelectorAll('.tab').forEach((item) => 
+    item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const id = e.target.getAttribute('href').replace('#', '');
+
+        document.querySelectorAll('.tab').forEach(
+            (child) => child.classList.remove('active-tab')
+        );
+        document.querySelectorAll('.tab__item').forEach(
+            (child) => child.classList.remove('active')
+        )
+        
+        item.classList.add('active-tab');
+        document.getElementById(id).classList.add('active');
+    })
+);
+
+document.querySelector('.tab').click();
 
 // Получение погоды
 UI_ELEMENTS.FIND_FORM.addEventListener('submit', getWeather);
 
 async function getWeather(event) {
     event.preventDefault();
-
-    while(UI_ELEMENTS.TAB_NOW.firstChild){
-        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
-    };
 
     const SERVER_URL = 'http://api.openweathermap.org/data/2.5/weather';
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
@@ -50,6 +55,10 @@ async function getWeather(event) {
 // Отрисовка вкладки NOW
 function renderNow(temp, city, icon) {
 
+    while(UI_ELEMENTS.TAB_NOW.firstChild){
+        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
+    };
+
     const p1 = document.createElement('p');
     p1.classList.add('tab-now__temperature');
     p1.textContent = temp + '°';
@@ -75,14 +84,23 @@ function renderNow(temp, city, icon) {
 // Отрисовка вкладки DETAILS
 function renderDetails(data) {
 
-    const dateInMs = data.sys.sunrise;
-    const minutes = new Date(dateInMs).getMinutes();
-    const seconds = new Date(dateInMs).getSeconds();
+    while(UI_ELEMENTS.TAB_DETAILS.firstChild){
+        UI_ELEMENTS.TAB_DETAILS.removeChild(UI_ELEMENTS.TAB_DETAILS.firstChild);
+    };
+
+    const dateInMsSunrise = data.sys.sunrise * 1000;
+    const hoursSunrise = new Date(dateInMsSunrise).getHours();
+    const minutesSunrise = new Date(dateInMsSunrise).getMinutes();
+    const dateInMsSunset = data.sys.sunset * 1000;
+    const hoursSunset = new Date(dateInMsSunset).getHours();
+    const minutesSunset = new Date(dateInMsSunset).getMinutes();
+
     const arrData = [
-        `Temperature: ${Math.round(data.main.temp)}°`,
-        `Feels like: ${Math.round(data.main.feels_like)}°`,
-        `Weather: ${data.weather[0].main}`,
-        `Sunrise: ${minutes}:${seconds}`,
+        `Температура: ${Math.round(data.main.temp)}°`,
+        `По ощущениям: ${Math.round(data.main.feels_like)}°`,
+        `Погода: ${data.weather[0].description}`,
+        `Восход: ${hoursSunrise}:${minutesSunrise}`,
+        `Закат: ${hoursSunset}:${minutesSunset}`,
     ];
 
     const p = document.createElement('p');
@@ -99,7 +117,6 @@ function renderDetails(data) {
         li.textContent = item;
         ul.appendChild(li);
     }
-
 
     UI_ELEMENTS.TAB_DETAILS.appendChild(ul);
 };

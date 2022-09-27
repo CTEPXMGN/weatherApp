@@ -77,7 +77,8 @@ body {
     padding: 15px;
     margin: 100px auto;
     display: flex;
-    background-color: rgb(255, 255, 255, 0.5);
+    background-color: rgba(253, 212, 188, 0.5);
+    border-radius: 10px;
 }
 
 .container {
@@ -85,7 +86,7 @@ body {
     height: 435px;
     border: 1px solid black;
     margin: auto;
-    background-color: rgb(202, 192, 100, 0.7);
+    background-color: rgba(250, 236, 218, 0.836);
     display: grid;
     grid-template-columns: 100px 100px 100px 1fr;
     grid-template-rows: 45px 60px 1fr 45px;
@@ -254,13 +255,9 @@ body {
     line-height: 40px;
 }
 
-.tab__item:target {
+/* .tab__item:target {
     display: block;
-}
-
-.tab__item::before {
-    content: "";
-}
+} */
 
 .tab-forecast__city {
     margin-left: 18px;
@@ -313,6 +310,10 @@ body {
 }
 
 .active-tab {
-    color: #FFF;
+    color: rgb(250, 236, 218);
     background-color: #000;
+}
+
+.active {
+    display: block;
 }
