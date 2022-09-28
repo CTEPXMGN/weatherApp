@@ -177,6 +177,10 @@ body {
     line-height: 40px;
 }
 
+.added-cities__item button{
+    margin-left: auto;
+}
+
 .tab-now {
     position: relative;
 }
@@ -316,4 +320,10 @@ body {
 
 .active {
     display: block;
+}
+
+.delete-city {
+    width: 18px;
+    height: 16px;
+    background-image: url(/img/close-icon.svg);
 }

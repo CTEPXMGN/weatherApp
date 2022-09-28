@@ -1,7 +1,8 @@
 import { UI_ELEMENTS } from "./view.js";
 
-// Переключение табов
+let favoriteCities = [];
 
+// Переключение табов
 document.querySelectorAll('.tab').forEach((item) => 
     item.addEventListener('click', function(e) {
         e.preventDefault();
@@ -36,11 +37,11 @@ async function getWeather(event) {
 
         if (response.ok) {
             let dataWeather = await response.json();
-            console.log(dataWeather);
     
             const SRC_IMG = `
             https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
             `;
+
             renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
             renderDetails(dataWeather);
         } else {
@@ -72,13 +73,47 @@ function renderNow(temp, city, icon) {
     const input = document.createElement('input');
     input.classList.add('tab-now__add');
     input.type = 'button';
+    input.addEventListener('click', addToFavorites);
     UI_ELEMENTS.TAB_NOW.appendChild(input);
 
     const img = document.createElement('img');
     img.classList.add('tab-now__img');
     img.src = icon;
     img.alt = 'weather icon';
+
     UI_ELEMENTS.TAB_NOW.appendChild(img);
+};
+
+// Добавление в избранное
+function addToFavorites() {
+
+    favoriteCities.push(this.previousSibling.textContent);
+    renderFavorites();
+};
+
+// Отрисовка избранного
+function renderFavorites() {
+
+    while(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild){
+        UI_ELEMENTS.ADDED_CITIES_LIST.removeChild(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild);
+    };
+    
+    for (const elem of favoriteCities) {
+        const li = document.createElement('li');
+        li.classList.add('added-cities__item');
+        li.textContent = elem + '   ';
+        li.addEventListener('click', function() {
+            console.log(elem); // -------------------
+        })
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('delete-city');
+        deleteButton.addEventListener('click', function() {
+            favoriteCities = favoriteCities.filter(item => item !== elem);
+            renderFavorites();
+        });
+        li.appendChild(deleteButton);
+        UI_ELEMENTS.ADDED_CITIES_LIST.appendChild(li);
+    };
 };
 
 // Отрисовка вкладки DETAILS
