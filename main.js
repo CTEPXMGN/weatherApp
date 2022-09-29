@@ -24,6 +24,7 @@ document.querySelector('.tab').click();
 
 // Получение погоды
 UI_ELEMENTS.FIND_FORM.addEventListener('submit', getWeather);
+UI_ELEMENTS.FIND_CITY.addEventListener('click', getWeather);
 
 async function getWeather(event) {
     event.preventDefault();
@@ -103,8 +104,9 @@ function renderFavorites() {
         li.classList.add('added-cities__item');
         li.textContent = elem + '   ';
         li.addEventListener('click', function() {
-            console.log(elem); // -------------------
-        })
+            UI_ELEMENTS.FIND_INPUT.value = elem;
+            getWeather(event);
+        });
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-city');
         deleteButton.addEventListener('click', function() {
