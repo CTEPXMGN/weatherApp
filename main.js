@@ -1,6 +1,6 @@
 import { UI_ELEMENTS } from "./view.js";
 
-let favoriteCities = [];
+let favoritesCities = [];
 
 // Переключение табов
 document.querySelectorAll('.tab').forEach((item) => 
@@ -45,6 +45,7 @@ async function getWeather(event) {
 
             renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
             renderDetails(dataWeather);
+            renderForecast(dataWeather);
         } else {
             alert('Ошибочка вышла: ' + response.status);
         }
@@ -74,7 +75,7 @@ function renderNow(temp, city, icon) {
     const input = document.createElement('input');
     input.classList.add('tab-now__add');
     input.type = 'button';
-    input.addEventListener('click', addToFavorites);
+    input.addEventListener('click', () => addToFavorites(city));
     UI_ELEMENTS.TAB_NOW.appendChild(input);
 
     const img = document.createElement('img');
@@ -86,31 +87,41 @@ function renderNow(temp, city, icon) {
 };
 
 // Добавление в избранное
-function addToFavorites() {
-    favoriteCities.push(this.previousSibling.textContent);
-    renderFavorites();
+function addToFavorites(city) {
+
+    favoritesCities = favoritesCities.concat([city]);
+    localStorage.setItem('cities', JSON.stringify(favoritesCities));
+    favoritesCities = JSON.parse(localStorage.getItem('cities'));
+    console.log(favoritesCities);
+
+    renderFavorites(favoritesCities);
 };
 
 // Отрисовка избранного
-function renderFavorites() {
+function renderFavorites(cities) {
 
     while(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild){
         UI_ELEMENTS.ADDED_CITIES_LIST.removeChild(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild);
     };
-    
-    for (const elem of favoriteCities) {
+
+    for (const elem of cities) {
         const li = document.createElement('li');
         li.classList.add('added-cities__item');
         li.textContent = elem + '   ';
         li.addEventListener('click', function() {
             UI_ELEMENTS.FIND_INPUT.value = elem;
             getWeather(event);
-        });
+        })
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-city');
-        deleteButton.addEventListener('click', function() {
-            favoriteCities = favoriteCities.filter(item => item !== elem);
-            renderFavorites();
+        deleteButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+
+            cities = JSON.parse(localStorage.getItem('cities'));
+            favoritesCities = cities.filter(item => item !== elem);
+            localStorage.cities = JSON.stringify(favoritesCities);
+            console.log(favoritesCities);
+            renderFavorites(favoritesCities);
         });
         li.appendChild(deleteButton);
         UI_ELEMENTS.ADDED_CITIES_LIST.appendChild(li);
@@ -155,4 +166,9 @@ function renderDetails(data) {
     }
 
     UI_ELEMENTS.TAB_DETAILS.appendChild(ul);
+};
+
+function renderForecast(data) {
+    console.log(data);
+
 };

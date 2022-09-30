@@ -1,0 +1,3 @@
+export {favoriteCities};
+
+let favoriteCities = [];
