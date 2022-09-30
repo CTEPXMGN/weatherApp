@@ -87,7 +87,6 @@ function renderNow(temp, city, icon) {
 
 // Добавление в избранное
 function addToFavorites() {
-
     favoriteCities.push(this.previousSibling.textContent);
     renderFavorites();
 };
