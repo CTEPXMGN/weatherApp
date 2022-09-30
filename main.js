@@ -46,6 +46,7 @@ async function getWeather(event) {
             renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
             renderDetails(dataWeather);
             renderForecast(dataWeather);
+            localStorage.setItem('currentCity', dataWeather.name);
         } else {
             alert('Ошибочка вышла: ' + response.status);
         }
@@ -169,6 +170,4 @@ function renderDetails(data) {
 };
 
 function renderForecast(data) {
-    console.log(data);
-
 };
