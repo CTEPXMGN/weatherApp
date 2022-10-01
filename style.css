@@ -306,6 +306,8 @@ body {
     position: absolute;
     bottom: 40px;
     right: 10px;
+    width: 110px;
+    text-align: right;
 }
 .tab-forecast__icon {
     position: absolute;

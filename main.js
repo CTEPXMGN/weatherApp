@@ -189,5 +189,75 @@ function renderDetails(data) {
     UI_ELEMENTS.TAB_DETAILS.appendChild(ul);
 };
 
+// async function getIcon(index) {
+//         const SRC_IMG_FORECAST = `
+//         https://openweathermap.org/img/wn/${dataWeatherForecast[index].weather[0].icon}@2x.png
+//         `;
+//         let response = await fetch(SRC_IMG_FORECAST);
+//         return response;
+// }
+
 function renderForecast(data) {
+
+    while(UI_ELEMENTS.TAB_FORECAST.firstChild){
+        UI_ELEMENTS.TAB_FORECAST.removeChild(
+            UI_ELEMENTS.TAB_FORECAST.firstChild
+            );
+    };
+
+    const monthes = ['дек','янв','фев','марта',
+                     'апр','мая','июня',
+                     'июля','авг','сент',
+                     'окт','нояб'];
+
+    const dataForecast = data.list;
+
+    const p = document.createElement('p');
+    p.classList.add('tab-forecast__city');
+    p.textContent = data.city.name;
+    UI_ELEMENTS.TAB_FORECAST.appendChild(p);
+
+    for (let i = 0; i <= 10; i++) {
+        let month = dataForecast[i].dt_txt.slice(5, 7);
+        let temp = Math.round(dataForecast[i].main.temp);
+        let tempFillsLike = Math.round(dataForecast[i].main.feels_like);
+
+        const div = document.createElement('div');
+        div.classList.add('tab-forecast__block');
+
+        const p1 = document.createElement('p');
+        p1.classList.add('tab-forecast__date');
+        p1.textContent = `
+        ${dataForecast[i].dt_txt.slice(8, 10)} ${monthes[month]}
+        `;
+        div.appendChild(p1);
+
+        const p2 = document.createElement('p');
+        p2.classList.add('tab-forecast__time');
+        p2.textContent = dataForecast[i].dt_txt.slice(11, 16);
+        div.appendChild(p2);
+
+        const p3 = document.createElement('p');
+        p3.classList.add('tab-forecast__tesperature');
+        p3.textContent = `Темп-ра: ${temp}°`;
+        div.appendChild(p3);
+
+        const p4 = document.createElement('p');
+        p4.classList.add('tab-forecast__feels-like');
+        p4.textContent = `Ощущ. как: ${tempFillsLike}°`;
+        div.appendChild(p4);
+
+        const p5 = document.createElement('p');
+        p5.classList.add('tab-forecast__weather');
+        p5.textContent = dataForecast[i].weather[0].description;
+        div.appendChild(p5);
+
+        const img = document.createElement('img');
+        img.classList.add('tab-forecast__icon');
+        img.alt="icon weather";
+        img.src = '/img/icon-rain.svg'; // Нужно заменить иконку
+        div.appendChild(img);
+
+        UI_ELEMENTS.TAB_FORECAST.appendChild(div);
+    };
 };
