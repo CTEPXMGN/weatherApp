@@ -40,14 +40,19 @@ function handlerCitySearch(event) {
 async function getWeather(city) {
 
     const SERVER_URL = 'http://api.openweathermap.org/data/2.5/weather';
+    const SERVER_URL_FORECAST = 'https://api.openweathermap.org/data/2.5/forecast';
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
     const URL = `${SERVER_URL}?q=${city}&appid=${API_KEY}&units=metric&lang=ru`;
+    const URL_FORECAST = `${SERVER_URL_FORECAST}?q=${city}&appid=${API_KEY}&units=metric&lang=ru`;
     
     try {
         let response = await fetch(URL);
+        let response2 = await fetch(URL_FORECAST);
 
-        if (response.ok) {
+        if (response.ok && response2.ok) {
             let dataWeather = await response.json();
+            let dataWeatherForecast = await response2.json();
+            console.log(dataWeatherForecast);
     
             const SRC_IMG = `
             https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
@@ -55,7 +60,7 @@ async function getWeather(city) {
 
             renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
             renderDetails(dataWeather);
-            renderForecast(dataWeather);
+            renderForecast(dataWeatherForecast);
             localStorage.setItem('currentCity', dataWeather.name);
         } else {
             alert('Ошибочка вышла: ' + response.status);
