@@ -2,10 +2,22 @@ import { UI_ELEMENTS } from "./view.js";
 
 let favoritesCities = [];
 
+function getCurrentCity() {
+    return localStorage.getItem('currentCity');
+}
+const currentCity = getCurrentCity();
+
+function getFavoriteCities() {
+    return JSON.parse(localStorage.getItem('cities'));
+}
+const favoriteCities = getFavoriteCities();
+renderFavorites(favoriteCities);
+getWeather(currentCity);
+
 // Переключение табов
 document.querySelectorAll('.tab').forEach((item) => 
-    item.addEventListener('click', function(e) {
-        e.preventDefault();
+    item.addEventListener('click', function(event) {
+        event.preventDefault();
         const id = e.target.getAttribute('href').replace('#', '');
 
         document.querySelectorAll('.tab').forEach(
@@ -23,15 +35,21 @@ document.querySelectorAll('.tab').forEach((item) =>
 document.querySelector('.tab').click();
 
 // Получение погоды
-UI_ELEMENTS.FIND_FORM.addEventListener('submit', getWeather);
-UI_ELEMENTS.FIND_CITY.addEventListener('click', getWeather);
+UI_ELEMENTS.FIND_FORM.addEventListener('submit', handlerCitySearch);
+UI_ELEMENTS.FIND_CITY.addEventListener('click', handlerCitySearch);
 
-async function getWeather(event) {
+function handlerCitySearch(event) {
     event.preventDefault();
+
+    const city = UI_ELEMENTS.FIND_INPUT.value;
+    getWeather(city);
+};
+
+async function getWeather(city) {
 
     const SERVER_URL = 'http://api.openweathermap.org/data/2.5/weather';
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
-    const URL = `${SERVER_URL}?q=${UI_ELEMENTS.FIND_INPUT.value}&appid=${API_KEY}&units=metric&lang=ru`;
+    const URL = `${SERVER_URL}?q=${city}&appid=${API_KEY}&units=metric&lang=ru`;
     
     try {
         let response = await fetch(URL);
@@ -115,8 +133,8 @@ function renderFavorites(cities) {
         })
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-city');
-        deleteButton.addEventListener('click', function(e) {
-            e.stopPropagation();
+        deleteButton.addEventListener('click', function(event) {
+            event.stopPropagation();
 
             cities = JSON.parse(localStorage.getItem('cities'));
             favoritesCities = cities.filter(item => item !== elem);
