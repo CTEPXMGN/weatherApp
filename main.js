@@ -18,7 +18,7 @@ getWeather(currentCity);
 document.querySelectorAll('.tab').forEach((item) => 
     item.addEventListener('click', function(event) {
         event.preventDefault();
-        const id = e.target.getAttribute('href').replace('#', '');
+        const id = event.target.getAttribute('href').replace('#', '');
 
         document.querySelectorAll('.tab').forEach(
             (child) => child.classList.remove('active-tab')
@@ -107,11 +107,9 @@ function renderNow(temp, city, icon) {
 
 // Добавление в избранное
 function addToFavorites(city) {
-
+    favoritesCities = JSON.parse(localStorage.getItem('cities'));
     favoritesCities = favoritesCities.concat([city]);
     localStorage.setItem('cities', JSON.stringify(favoritesCities));
-    favoritesCities = JSON.parse(localStorage.getItem('cities'));
-    console.log(favoritesCities);
 
     renderFavorites(favoritesCities);
 };
@@ -120,31 +118,38 @@ function addToFavorites(city) {
 function renderFavorites(cities) {
 
     while(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild){
-        UI_ELEMENTS.ADDED_CITIES_LIST.removeChild(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild);
+        UI_ELEMENTS.ADDED_CITIES_LIST.removeChild(
+            UI_ELEMENTS.ADDED_CITIES_LIST.firstChild
+            );
     };
 
     for (const elem of cities) {
         const li = document.createElement('li');
         li.classList.add('added-cities__item');
         li.textContent = elem + '   ';
-        li.addEventListener('click', function() {
-            UI_ELEMENTS.FIND_INPUT.value = elem;
-            getWeather(event);
-        })
+        li.addEventListener('click', () => findFromFavorite(elem));
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-city');
-        deleteButton.addEventListener('click', function(event) {
-            event.stopPropagation();
-
-            cities = JSON.parse(localStorage.getItem('cities'));
-            favoritesCities = cities.filter(item => item !== elem);
-            localStorage.cities = JSON.stringify(favoritesCities);
-            console.log(favoritesCities);
-            renderFavorites(favoritesCities);
-        });
+        deleteButton.addEventListener('click', () => delFromFavorites(event, cities, elem));
         li.appendChild(deleteButton);
         UI_ELEMENTS.ADDED_CITIES_LIST.appendChild(li);
     };
+};
+
+// Удаление из избранного
+function delFromFavorites(event, cities, elem) {
+    event.stopPropagation();
+
+    cities = JSON.parse(localStorage.getItem('cities'));
+    favoritesCities = cities.filter(item => item !== elem);
+    localStorage.cities = JSON.stringify(favoritesCities);
+    renderFavorites(favoritesCities);
+};
+
+// Поиск из избранного
+function findFromFavorite(elem) {
+    let city = elem;
+    getWeather(city);
 };
 
 // Отрисовка вкладки DETAILS
