@@ -1,8 +1,6 @@
 import { UI_ELEMENTS } from "./view.js";
 import {currentCity, favoriteCities} from "./storage.js";
 
-let favoritesCities = [];
-
 if (!localStorage.getItem('cities')) {
     localStorage.setItem('cities', `[]`); 
 } else {
@@ -189,16 +187,7 @@ function renderDetails(data) {
     UI_ELEMENTS.TAB_DETAILS.appendChild(ul);
 };
 
-// async function getIcon(index) {
-//         const SRC_IMG_FORECAST = `
-//         https://openweathermap.org/img/wn/${dataWeatherForecast[index].weather[0].icon}@2x.png
-//         `;
-//         let response = await fetch(SRC_IMG_FORECAST);
-//         return response;
-// }
-
 function renderForecast(data) {
-
     while(UI_ELEMENTS.TAB_FORECAST.firstChild){
         UI_ELEMENTS.TAB_FORECAST.removeChild(
             UI_ELEMENTS.TAB_FORECAST.firstChild
