@@ -3,8 +3,15 @@ import {currentCity, favoriteCities} from "./storage.js";
 
 let favoritesCities = [];
 
-renderFavorites(favoriteCities);
-getWeather(currentCity);
+if (!localStorage.getItem('cities')) {
+    localStorage.setItem('cities', `[]`); 
+} else {
+    renderFavorites(favoriteCities);
+};
+
+if (localStorage.getItem('currentCity')) {
+    getWeather(currentCity);
+};
 
 // Переключение табов
 document.querySelectorAll('.tab').forEach((item) => 
@@ -17,13 +24,12 @@ document.querySelectorAll('.tab').forEach((item) =>
         );
         document.querySelectorAll('.tab__item').forEach(
             (child) => child.classList.remove('active')
-        )
+        );
         
         item.classList.add('active-tab');
         document.getElementById(id).classList.add('active');
     })
 );
-
 document.querySelector('.tab').click();
 
 // Получение погоды
@@ -38,7 +44,6 @@ function handlerCitySearch(event) {
 };
 
 async function getWeather(city) {
-
     const SERVER_URL = 'http://api.openweathermap.org/data/2.5/weather';
     const SERVER_URL_FORECAST = 'https://api.openweathermap.org/data/2.5/forecast';
     const API_KEY = '0a8c506a0f09e19f0f5a48594460c570';
@@ -52,7 +57,6 @@ async function getWeather(city) {
         if (response.ok && response2.ok) {
             let dataWeather = await response.json();
             let dataWeatherForecast = await response2.json();
-            console.log(dataWeatherForecast);
     
             const SRC_IMG = `
             https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
@@ -68,12 +72,10 @@ async function getWeather(city) {
     } catch (error) {
         alert(error.stack);
     }
-    
     UI_ELEMENTS.FIND_INPUT.value = '';
 }
 // Отрисовка вкладки NOW
 function renderNow(temp, city, icon) {
-
     while(UI_ELEMENTS.TAB_NOW.firstChild){
         UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
     };
@@ -104,7 +106,7 @@ function renderNow(temp, city, icon) {
 
 // Добавление в избранное
 function addToFavorites(city) {
-    favoritesCities = JSON.parse(localStorage.getItem('cities'));
+    let favoritesCities = JSON.parse(localStorage.getItem('cities'));
     favoritesCities = favoritesCities.concat([city]);
     localStorage.setItem('cities', JSON.stringify(favoritesCities));
 
@@ -113,7 +115,6 @@ function addToFavorites(city) {
 
 // Отрисовка избранного
 function renderFavorites(cities) {
-
     while(UI_ELEMENTS.ADDED_CITIES_LIST.firstChild){
         UI_ELEMENTS.ADDED_CITIES_LIST.removeChild(
             UI_ELEMENTS.ADDED_CITIES_LIST.firstChild
@@ -143,7 +144,7 @@ function delFromFavorites(event, cities, elem) {
     renderFavorites(favoritesCities);
 };
 
-// Поиск из избранного
+// Поиск города из избранного
 function findFromFavorite(elem) {
     let city = elem;
     getWeather(city);
@@ -151,7 +152,6 @@ function findFromFavorite(elem) {
 
 // Отрисовка вкладки DETAILS
 function renderDetails(data) {
-
     while(UI_ELEMENTS.TAB_DETAILS.firstChild){
         UI_ELEMENTS.TAB_DETAILS.removeChild(UI_ELEMENTS.TAB_DETAILS.firstChild);
     };
