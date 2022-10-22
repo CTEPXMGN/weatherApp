@@ -137,7 +137,7 @@ function delFromFavorites(event, cities, elem) {
     event.stopPropagation();
 
     cities = JSON.parse(localStorage.getItem('cities'));
-    favoritesCities = cities.filter(item => item !== elem);
+    let favoritesCities = cities.filter(item => item !== elem);
     localStorage.cities = JSON.stringify(favoritesCities);
     renderFavorites(favoritesCities);
 };
