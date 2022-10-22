@@ -104,11 +104,11 @@ function renderNow(temp, city, icon) {
 
 // Добавление в избранное
 function addToFavorites(city) {
-    let favoritesCities = JSON.parse(localStorage.getItem('cities'));
-    favoritesCities = favoritesCities.concat([city]);
-    localStorage.setItem('cities', JSON.stringify(favoritesCities));
+    const favoriteCities = new Set(JSON.parse(localStorage.getItem('cities')));
+    favoriteCities.add(city);
+    localStorage.setItem('cities', JSON.stringify([...favoriteCities]));
 
-    renderFavorites(favoritesCities);
+    renderFavorites(favoriteCities);
 };
 
 // Отрисовка избранного
@@ -127,8 +127,8 @@ function renderFavorites(cities) {
         const deleteButton = document.createElement('button');
         deleteButton.classList.add('delete-city');
         deleteButton.addEventListener('click', () => delFromFavorites(event, cities, elem));
-        li.appendChild(deleteButton);
-        UI_ELEMENTS.ADDED_CITIES_LIST.appendChild(li);
+        li.append(deleteButton);
+        UI_ELEMENTS.ADDED_CITIES_LIST.append(li);
     };
 };
 
