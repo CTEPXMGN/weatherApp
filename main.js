@@ -55,9 +55,12 @@ async function getWeather(city) {
         if (response.ok && response2.ok) {
             let dataWeather = await response.json();
             let dataWeatherForecast = await response2.json();
-    
+            console.log(dataWeatherForecast);
             const SRC_IMG = `
             https://openweathermap.org/img/wn/${dataWeather.weather[0].icon}@4x.png
+            `;
+            const SRC_IMG_FORECAST = `
+            https://openweathermap.org/img/wn/${dataWeatherForecast.list[0].weather[0].icon}@4x.png
             `;
 
             renderNow(Math.round(dataWeather.main.temp) ,dataWeather.name, SRC_IMG);
@@ -71,12 +74,17 @@ async function getWeather(city) {
         alert(error.stack);
     }
     UI_ELEMENTS.FIND_INPUT.value = '';
+};
+
+function clearTab() {
+    if (UI_ELEMENTS.TAB_NOW.firstChild) {
+        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
+        clearTab();
+    }
 }
 // Отрисовка вкладки NOW
 function renderNow(temp, city, icon) {
-    while(UI_ELEMENTS.TAB_NOW.firstChild){
-        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
-    };
+    clearTab();
 
     const p1 = document.createElement('p');
     p1.classList.add('tab-now__temperature');
