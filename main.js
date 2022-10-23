@@ -76,15 +76,15 @@ async function getWeather(city) {
     UI_ELEMENTS.FIND_INPUT.value = '';
 };
 
-function clearTab() {
-    if (UI_ELEMENTS.TAB_NOW.firstChild) {
-        UI_ELEMENTS.TAB_NOW.removeChild(UI_ELEMENTS.TAB_NOW.firstChild);
-        clearTab();
-    }
-}
+function clearTab(parent) {
+    if (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+        clearTab(parent);
+    };
+};
 // Отрисовка вкладки NOW
 function renderNow(temp, city, icon) {
-    clearTab();
+    clearTab(UI_ELEMENTS.TAB_NOW);
 
     const p1 = document.createElement('p');
     p1.classList.add('tab-now__temperature');
