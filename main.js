@@ -98,7 +98,6 @@ function renderNow(temp, city, icon) {
     img.classList.add('tab-now__img');
     img.src = icon;
     img.alt = 'weather icon';
-
     UI_ELEMENTS.TAB_NOW.appendChild(img);
 };
 
