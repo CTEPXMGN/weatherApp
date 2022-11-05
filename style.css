@@ -259,10 +259,6 @@ body {
     line-height: 40px;
 }
 
-/* .tab__item:target {
-    display: block;
-} */
-
 .tab-forecast__city {
     margin-left: 18px;
     margin-top: 20px;
@@ -276,6 +272,7 @@ body {
     width: 265px;
     height: 120px;
     border: 1px solid #000;
+    border-radius: 5px;
     margin: 0 18px 18px 18px;
     position: relative;
 }
